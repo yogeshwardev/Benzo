@@ -19,7 +19,9 @@
     "noFallthroughCasesInSwitch": false,
     "paths": {
       "@/*": ["src/*"],
-      "@shared/*": ["../shared/src/*"]
+      "@shared/*": ["../shared/src/*"],
+      "@skillforge/shared": ["../shared/src"],
+      "@skillforge/shared/*": ["../shared/src/*"]
     }
   },
   "include": ["src/**/*"],
