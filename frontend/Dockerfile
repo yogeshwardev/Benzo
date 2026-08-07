@@ -22,7 +22,7 @@ RUN addgroup -g 1001 -S nodejs && adduser -S nodejs -u 1001 -G nodejs
 COPY frontend/package*.json ./
 COPY --from=builder /app/frontend/public ./public
 COPY --from=builder /app/frontend/.next ./.next
-COPY --from=builder /app/frontend/node_modules ./node_modules
+COPY --from=builder /app/node_modules ./node_modules
 COPY --from=builder /app/shared ./shared
 
 RUN chown -R nodejs:nodejs /app

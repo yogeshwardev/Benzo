@@ -21,7 +21,7 @@ RUN addgroup -g 1001 -S nodejs && adduser -S nodejs -u 1001 -G nodejs
 
 COPY backend/package*.json ./
 COPY --from=builder /app/backend/dist ./dist
-COPY --from=builder /app/backend/node_modules ./node_modules
+COPY --from=builder /app/node_modules ./node_modules
 COPY --from=builder /app/backend/prisma ./prisma
 COPY --from=builder /app/shared ./shared
 
