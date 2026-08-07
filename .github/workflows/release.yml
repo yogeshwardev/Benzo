@@ -9,7 +9,7 @@ on:
 jobs:
   create-release:
     name: Create GitHub Release
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-20.04
     
     steps:
       - name: Checkout code
@@ -34,7 +34,7 @@ jobs:
 
   build-and-push-images:
     name: Build and Push Docker Images
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-20.04
     needs: create-release
     
     steps:
