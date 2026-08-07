@@ -63,7 +63,7 @@ jobs:
           rsync -avz -e "ssh -i ~/.ssh/deploy_key" docker-compose.prod.yml ${{ secrets.AWS_USER }}@${{ secrets.AWS_HOST }}:~/skillforge/docker-compose.prod.yml
 
           # Restart containers on server
-          ssh -i ~/.ssh/deploy_key ${{ secrets.AWS_USER }}@${{ secrets.AWS_HOST }} 'cd ~/skillforge && docker-compose -f docker-compose.prod.yml up -d --build'
+          ssh -i ~/.ssh/deploy_key ${{ secrets.AWS_USER }}@${{ secrets.AWS_HOST }} 'cd ~/skillforge && docker compose -f docker-compose.prod.yml up -d --build'
 
       - name: Health Check
         if: steps.check_aws.outputs.skip_deploy != 'true'
@@ -84,4 +84,4 @@ jobs:
         if: failure() && steps.check_aws.outputs.skip_deploy != 'true'
         run: |
           echo "Deployment failed, rolling back..."
-          ssh -i ~/.ssh/deploy_key ${{ secrets.AWS_USER }}@${{ secrets.AWS_HOST }} 'cd ~/skillforge && cp -r backend-backup/* backend/ 2>/dev/null || true && cp -r frontend-backup/* frontend/ 2>/dev/null || true && docker-compose -f docker-compose.prod.yml down && docker-compose -f docker-compose.prod.yml up -d'
+          ssh -i ~/.ssh/deploy_key ${{ secrets.AWS_USER }}@${{ secrets.AWS_HOST }} 'cd ~/skillforge && cp -r backend-backup/* backend/ 2>/dev/null || true && cp -r frontend-backup/* frontend/ 2>/dev/null || true && docker compose -f docker-compose.prod.yml down && docker compose -f docker-compose.prod.yml up -d'
