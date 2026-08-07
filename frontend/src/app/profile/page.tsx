@@ -3,6 +3,7 @@
 import { useAuth } from '@/lib/auth-context'
 import { redirect } from 'next/navigation'
 import { Button } from '@/components/ui/button'
+import Link from 'next/link'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { User, Mail, Phone, MapPin, BookOpen, Award, Wallet, Settings, LogOut } from 'lucide-react'
 import { motion } from 'framer-motion'

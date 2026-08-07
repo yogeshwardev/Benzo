@@ -422,12 +422,12 @@ export class LessonsService {
       });
 
       // Generate certificate if not already exists
-      const existingCertificate = await this.prisma.certificate.findUnique({
-        where: { enrollmentId: updatedEnrollment.id },
+      const existingCertificate = await this.prisma.certificate.findFirst({
+        where: { userId, courseId },
       });
 
       if (!existingCertificate) {
-        await this.certificatesService.generateCertificate(userId, courseId, updatedEnrollment.id);
+        await this.certificatesService.generateCertificate(updatedEnrollment.id);
       }
     }
   }

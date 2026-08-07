@@ -2,6 +2,7 @@
 
 import { DashboardLayout } from '@/components/layout/dashboard-layout'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
+import { Button } from '@/components/ui/button'
 import { Wallet, Plus, History, ArrowUp, ArrowDown } from 'lucide-react'
 import { useEffect, useState } from 'react'
 import { api } from '@/lib/api'

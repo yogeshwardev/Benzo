@@ -137,7 +137,7 @@ export class PricingService {
     }
 
     // Default platform fee is 20%
-    const platformFeePercentage = course.platformFeePercentage || 20;
+    const platformFeePercentage = (course as any).platformFeePercentage || 20;
     const platformFee = Math.round((saleAmount * platformFeePercentage) / 100);
     const instructorEarnings = saleAmount - platformFee;
 
@@ -232,7 +232,7 @@ export class PricingService {
       } : null,
       maxDiscount,
       bestPrice: course.price - maxDiscount,
-      platformFeePercentage: course.platformFeePercentage || 20,
+      platformFeePercentage: (course as any).platformFeePercentage || 20,
     };
   }
 }

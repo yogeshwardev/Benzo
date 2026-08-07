@@ -2,6 +2,7 @@
 
 import { DashboardLayout } from '@/components/layout/dashboard-layout'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
+import { Button } from '@/components/ui/button'
 import { BookOpen, Clock, Award, Play } from 'lucide-react'
 import Link from 'next/link'
 import { useEffect, useState } from 'react'

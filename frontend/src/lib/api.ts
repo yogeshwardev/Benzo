@@ -220,6 +220,11 @@ class ApiClient {
     return response.data
   }
 
+  async getAdminCoupons() {
+    const response = await this.client.get('/admin/coupons')
+    return response.data
+  }
+
   // Instructor
   async getInstructorStats() {
     const response = await this.client.get('/instructor/stats')
@@ -243,3 +248,4 @@ class ApiClient {
 }
 
 export const api = new ApiClient()
+export default api
