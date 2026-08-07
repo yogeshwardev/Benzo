@@ -5,11 +5,16 @@ on:
     - cron: '0 0 * * 0'  # Weekly on Sunday at midnight
   workflow_dispatch:
 
+concurrency:
+  group: security
+  cancel-in-progress: true
+
 jobs:
   dependency-scan:
     name: Dependency Vulnerability Scan
-    runs-on: ubuntu-20.04
+    runs-on: ubuntu-latest
     continue-on-error: true
+    timeout-minutes: 20
     
     steps:
       - name: Checkout code
@@ -32,7 +37,7 @@ jobs:
 
   code-scan:
     name: CodeQL Analysis
-    runs-on: ubuntu-20.04
+    runs-on: ubuntu-latest
     timeout-minutes: 30
     continue-on-error: true
     
@@ -52,8 +57,9 @@ jobs:
 
   container-scan:
     name: Container Security Scan
-    runs-on: ubuntu-20.04
+    runs-on: ubuntu-latest
     continue-on-error: true
+    timeout-minutes: 20
     
     steps:
       - name: Checkout code

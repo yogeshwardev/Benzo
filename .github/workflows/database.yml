@@ -17,10 +17,15 @@ on:
         required: false
         type: string
 
+concurrency:
+  group: database
+  cancel-in-progress: true
+
 jobs:
   database-management:
     name: Database Management
-    runs-on: ubuntu-20.04
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
     
     steps:
       - name: Checkout code
