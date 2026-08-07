@@ -1,0 +1,60 @@
+name: Database Management
+
+on:
+  workflow_dispatch:
+    inputs:
+      action:
+        description: 'Database action'
+        required: true
+        type: choice
+        options:
+          - backup
+          - restore
+          - migrate
+          - rollback
+      backup_file:
+        description: 'Backup file name (for restore)'
+        required: false
+        type: string
+
+jobs:
+  database-management:
+    name: Database Management
+    runs-on: ubuntu-latest
+    
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Configure SSH
+        run: |
+          mkdir -p ~/.ssh
+          echo "${{ secrets.AWS_SSH_KEY }}" > ~/.ssh/deploy_key
+          chmod 600 ~/.ssh/deploy_key
+          ssh-keyscan -H ${{ secrets.AWS_HOST }} >> ~/.ssh/known_hosts
+
+      - name: Backup Database
+        if: github.event.inputs.action == 'backup'
+        run: |
+          TIMESTAMP=$(date +%Y%m%d_%H%M%S)
+          ssh -i ~/.ssh/deploy_key ${{ secrets.AWS_USER }}@${{ secrets.AWS_HOST }} 'docker exec skillforge-postgres pg_dump -U postgres skillforge > /tmp/backup_${TIMESTAMP}.sql'
+          ssh -i ~/.ssh/deploy_key ${{ secrets.AWS_USER }}@${{ secrets.AWS_HOST }} 'mkdir -p ~/backups && cp /tmp/backup_${TIMESTAMP}.sql ~/backups/'
+          echo "Backup created: backup_${TIMESTAMP}.sql"
+
+      - name: Restore Database
+        if: github.event.inputs.action == 'restore'
+        run: |
+          ssh -i ~/.ssh/deploy_key ${{ secrets.AWS_USER }}@${{ secrets.AWS_HOST }} 'docker exec -i skillforge-postgres psql -U postgres skillforge < ~/backups/${{ github.event.inputs.backup_file }}'
+          echo "Database restored from ${{ github.event.inputs.backup_file }}"
+
+      - name: Run Migrations
+        if: github.event.inputs.action == 'migrate'
+        run: |
+          ssh -i ~/.ssh/deploy_key ${{ secrets.AWS_USER }}@${{ secrets.AWS_HOST }} 'cd ~/skillforge/backend && npx prisma migrate deploy'
+          echo "Migrations completed"
+
+      - name: Rollback Migration
+        if: github.event.inputs.action == 'rollback'
+        run: |
+          ssh -i ~/.ssh/deploy_key ${{ secrets.AWS_USER }}@${{ secrets.AWS_HOST }} 'cd ~/skillforge/backend && npx prisma migrate resolve --rolled-back'
+          echo "Migration rolled back"

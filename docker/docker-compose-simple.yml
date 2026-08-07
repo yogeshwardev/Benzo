@@ -1,0 +1,74 @@
+version: '3.8'
+
+services:
+  # PostgreSQL Database
+  postgres:
+    image: postgres:15-alpine
+    container_name: skillforge-postgres
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: password
+      POSTGRES_DB: skillforge
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    networks:
+      - skillforge-network
+
+  # Redis
+  redis:
+    image: redis:7-alpine
+    container_name: skillforge-redis
+    ports:
+      - "6379:6379"
+    volumes:
+      - redis_data:/data
+    networks:
+      - skillforge-network
+
+  # Backend API
+  backend:
+    build:
+      context: ../backend
+      dockerfile: Dockerfile
+    container_name: skillforge-backend
+    environment:
+      DATABASE_URL: "postgresql://postgres:password@postgres:5432/skillforge?schema=public"
+      REDIS_HOST: redis
+      REDIS_PORT: 6379
+      JWT_SECRET: "skillforge-super-secret-jwt-key-2024-local-development-32chars"
+      JWT_REFRESH_SECRET: "skillforge-super-secret-refresh-key-2024-local-development-32chars"
+      PORT: 3001
+      NODE_ENV: development
+      FRONTEND_URL: "http://localhost:3000"
+    ports:
+      - "3001:3001"
+    depends_on:
+      - postgres
+      - redis
+    networks:
+      - skillforge-network
+
+  # Frontend
+  frontend:
+    build:
+      context: ../frontend
+      dockerfile: Dockerfile
+    container_name: skillforge-frontend
+    environment:
+      NEXT_PUBLIC_API_URL: "http://localhost:3001/api"
+    ports:
+      - "3000:3000"
+    depends_on:
+      - backend
+    networks:
+      - skillforge-network
+
+volumes:
+  postgres_data:
+  redis_data:
+
+networks:
+  skillforge-network:
+    driver: bridge
