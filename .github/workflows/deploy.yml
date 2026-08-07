@@ -59,6 +59,8 @@ jobs:
           # Copy new files
           rsync -avz -e "ssh -i ~/.ssh/deploy_key" backend/ ${{ secrets.AWS_USER }}@${{ secrets.AWS_HOST }}:~/skillforge/backend/
           rsync -avz -e "ssh -i ~/.ssh/deploy_key" frontend/ ${{ secrets.AWS_USER }}@${{ secrets.AWS_HOST }}:~/skillforge/frontend/
+          rsync -avz -e "ssh -i ~/.ssh/deploy_key" shared/ ${{ secrets.AWS_USER }}@${{ secrets.AWS_HOST }}:~/skillforge/shared/
+          rsync -avz -e "ssh -i ~/.ssh/deploy_key" package*.json ${{ secrets.AWS_USER }}@${{ secrets.AWS_HOST }}:~/skillforge/
           rsync -avz -e "ssh -i ~/.ssh/deploy_key" docker/ ${{ secrets.AWS_USER }}@${{ secrets.AWS_HOST }}:~/skillforge/docker/
           rsync -avz -e "ssh -i ~/.ssh/deploy_key" docker-compose.prod.yml ${{ secrets.AWS_USER }}@${{ secrets.AWS_HOST }}:~/skillforge/docker-compose.prod.yml
 
