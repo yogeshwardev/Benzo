@@ -4,11 +4,11 @@ FROM node:18-alpine AS builder
 WORKDIR /app
 
 COPY package*.json ./
-RUN npm ci --only=production=false
+COPY shared ./shared
+COPY backend ./backend
 
-COPY . .
-RUN npm run build
-RUN npx prisma generate
+RUN cd shared && npm ci && npm run build
+RUN cd backend && npm ci --only=production=false && npx prisma generate && npm run build
 
 # Production stage
 FROM node:18-alpine AS runner
@@ -19,12 +19,11 @@ ENV NODE_ENV production
 
 RUN addgroup -g nodejs && adduser -S nodejs -G nodejs
 
-COPY package*.json ./
-RUN npm ci --only=production
-
-COPY --from=builder /app/dist ./dist
-COPY --from=builder /app/node_modules/.prisma ./node_modules/.prisma
-COPY --from=builder /app/prisma ./prisma
+COPY backend/package*.json ./
+COPY --from=builder /app/backend/dist ./dist
+COPY --from=builder /app/backend/node_modules ./node_modules
+COPY --from=builder /app/backend/prisma ./prisma
+COPY --from=builder /app/shared ./shared
 
 RUN chown -R nodejs:nodejs /app
 

@@ -67,8 +67,8 @@ jobs:
 
       - name: Build Docker images
         run: |
-          docker build -t skillforge-backend:test ./backend
-          docker build -t skillforge-frontend:test ./frontend
+          docker build -f backend/Dockerfile -t skillforge-backend:test .
+          docker build -f frontend/Dockerfile -t skillforge-frontend:test .
 
       - name: Run Trivy vulnerability scanner
         uses: aquasecurity/trivy-action@master

@@ -35,7 +35,7 @@ jobs:
         run: cd frontend && npm ci
 
       - name: Install shared dependencies
-        run: cd shared && npm ci
+        run: cd shared && npm ci && npm run build
 
       - name: Lint backend
         run: cd backend && npm run lint || true
@@ -44,7 +44,7 @@ jobs:
         run: cd frontend && npm run lint || true
 
       - name: Type check backend
-        run: cd backend && npm run build
+        run: cd backend && npx prisma generate && npm run build
 
       - name: Type check frontend
         run: cd frontend && npm run type-check || true
@@ -74,8 +74,8 @@ jobs:
         run: |
           cd backend
           npm ci
-          npm run build
           npx prisma generate
+          npm run build
 
       - name: Build frontend
         run: |

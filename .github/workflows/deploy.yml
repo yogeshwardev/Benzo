@@ -13,24 +13,23 @@ jobs:
   deploy:
     name: Deploy to AWS EC2
     runs-on: ubuntu-latest
-    needs: [lint, build, security-scan]
     timeout-minutes: 30
     
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
 
-      - name: Download backend build artifacts
-        uses: actions/download-artifact@v4
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
         with:
-          name: backend-dist
-          path: backend/dist
+          node-version: '18.x'
 
-      - name: Download frontend build artifacts
-        uses: actions/download-artifact@v4
-        with:
-          name: frontend-dist
-          path: frontend/.next
+      - name: Install & Build
+        run: |
+          npm ci
+          cd shared && npm ci && npm run build && cd ..
+          cd backend && npm ci && npx prisma generate && npm run build && cd ..
+          cd frontend && npm ci && npm run build && cd ..
 
       - name: Configure SSH
         run: |
@@ -41,14 +40,17 @@ jobs:
 
       - name: Deploy to EC2
         run: |
-          # Deploy backend
-          scp -i ~/.ssh/deploy_key -r backend/ ${{ secrets.AWS_USER }}@${{ secrets.AWS_HOST }}:~/skillforge/backend-backup/
-          scp -i ~/.ssh/deploy_key -r frontend/ ${{ secrets.AWS_USER }}@${{ secrets.AWS_HOST }}:~/skillforge/frontend-backup/
+          # Backup existing installation on EC2
+          ssh -i ~/.ssh/deploy_key ${{ secrets.AWS_USER }}@${{ secrets.AWS_HOST }} 'mkdir -p ~/skillforge && cp -r ~/skillforge/backend ~/skillforge/backend-backup 2>/dev/null || true && cp -r ~/skillforge/frontend ~/skillforge/frontend-backup 2>/dev/null || true'
           
           # Copy new files
           rsync -avz -e "ssh -i ~/.ssh/deploy_key" backend/ ${{ secrets.AWS_USER }}@${{ secrets.AWS_HOST }}:~/skillforge/backend/
           rsync -avz -e "ssh -i ~/.ssh/deploy_key" frontend/ ${{ secrets.AWS_USER }}@${{ secrets.AWS_HOST }}:~/skillforge/frontend/
           rsync -avz -e "ssh -i ~/.ssh/deploy_key" docker/ ${{ secrets.AWS_USER }}@${{ secrets.AWS_HOST }}:~/skillforge/docker/
+          rsync -avz -e "ssh -i ~/.ssh/deploy_key" docker-compose.prod.yml ${{ secrets.AWS_USER }}@${{ secrets.AWS_HOST }}:~/skillforge/docker-compose.prod.yml
+
+          # Restart containers on server
+          ssh -i ~/.ssh/deploy_key ${{ secrets.AWS_USER }}@${{ secrets.AWS_HOST }} 'cd ~/skillforge && docker-compose -f docker-compose.prod.yml up -d --build'
 
       - name: Health Check
         run: |
@@ -65,4 +67,4 @@ jobs:
         if: failure()
         run: |
           echo "Deployment failed, rolling back..."
-          ssh -i ~/.ssh/deploy_key ${{ secrets.AWS_USER }}@${{ secrets.AWS_HOST }} 'cd ~/skillforge && cp -r backend-backup/* backend/ && cp -r frontend-backup/* frontend/ && docker-compose down && docker-compose up -d'
+          ssh -i ~/.ssh/deploy_key ${{ secrets.AWS_USER }}@${{ secrets.AWS_HOST }} 'cd ~/skillforge && cp -r backend-backup/* backend/ 2>/dev/null || true && cp -r frontend-backup/* frontend/ 2>/dev/null || true && docker-compose -f docker-compose.prod.yml down && docker-compose -f docker-compose.prod.yml up -d'

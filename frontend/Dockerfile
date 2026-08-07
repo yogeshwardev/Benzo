@@ -4,13 +4,11 @@ FROM node:18-alpine AS builder
 WORKDIR /app
 
 COPY package*.json ./
-RUN npm ci --only=production=false
+COPY shared ./shared
+COPY frontend ./frontend
 
-COPY shared ../shared ./shared
 RUN cd shared && npm ci && npm run build
-
-COPY . .
-RUN npm run build
+RUN cd frontend && npm ci --only=production=false && npm run build
 
 # Production stage
 FROM node:18-alpine AS runner
@@ -21,12 +19,10 @@ ENV NODE_ENV production
 
 RUN addgroup -g nodejs && adduser -S nodejs -G nodejs
 
-COPY package*.json ./
-RUN npm ci --only=production --legacy-peer-deps
-
-COPY --from=builder /app/public ./public
-COPY --from=builder /app/.next ./.next
-COPY --from=builder /app/node_modules ./node_modules
+COPY frontend/package*.json ./
+COPY --from=builder /app/frontend/public ./public
+COPY --from=builder /app/frontend/.next ./.next
+COPY --from=builder /app/frontend/node_modules ./node_modules
 COPY --from=builder /app/shared ./shared
 
 RUN chown -R nodejs:nodejs /app
