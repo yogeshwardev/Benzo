@@ -17,7 +17,7 @@ WORKDIR /app
 
 ENV NODE_ENV production
 
-RUN addgroup -g nodejs && adduser -S nodejs -G nodejs
+RUN addgroup -g 1001 -S nodejs && adduser -S nodejs -u 1001 -G nodejs
 
 COPY frontend/package*.json ./
 COPY --from=builder /app/frontend/public ./public
