@@ -16,7 +16,7 @@ permissions:
 jobs:
   dependency-scan:
     name: Dependency Vulnerability Scan
-    runs-on: ubuntu-20.04
+    runs-on: ubuntu-latest
     continue-on-error: true
     timeout-minutes: 20
     
@@ -41,7 +41,7 @@ jobs:
 
   code-scan:
     name: CodeQL Analysis
-    runs-on: ubuntu-20.04
+    runs-on: ubuntu-latest
     timeout-minutes: 30
     continue-on-error: true
     
@@ -61,7 +61,7 @@ jobs:
 
   container-scan:
     name: Container Security Scan
-    runs-on: ubuntu-20.04
+    runs-on: ubuntu-latest
     continue-on-error: true
     timeout-minutes: 20
     
