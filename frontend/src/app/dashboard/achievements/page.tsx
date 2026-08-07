@@ -79,7 +79,7 @@ export default function AchievementsPage() {
                       <Lock className="h-6 w-6 text-muted-foreground" />
                     )}
                   </div>
-                  {achievement.unlocked && (
+                  {achievement.unlocked && achievement.unlockedAt && (
                     <div className="text-xs text-muted-foreground">
                       {new Date(achievement.unlockedAt).toLocaleDateString()}
                     </div>

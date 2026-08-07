@@ -63,7 +63,7 @@ export default function AdminSettingsPage() {
                 <Input
                   id="siteName"
                   value={settings.siteName}
-                  onChange={(e) => setSettings({ ...settings, siteName: e.target.value })}
+                  onChange={(e: React.ChangeEvent<HTMLInputElement>) => setSettings({ ...settings, siteName: e.target.value })}
                 />
               </div>
 
@@ -72,7 +72,7 @@ export default function AdminSettingsPage() {
                 <Textarea
                   id="siteDescription"
                   value={settings.siteDescription}
-                  onChange={(e) => setSettings({ ...settings, siteDescription: e.target.value })}
+                  onChange={(e: React.ChangeEvent<HTMLTextAreaElement>) => setSettings({ ...settings, siteDescription: e.target.value })}
                   rows={2}
                 />
               </div>
@@ -83,7 +83,7 @@ export default function AdminSettingsPage() {
                   id="contactEmail"
                   type="email"
                   value={settings.contactEmail}
-                  onChange={(e) => setSettings({ ...settings, contactEmail: e.target.value })}
+                  onChange={(e: React.ChangeEvent<HTMLInputElement>) => setSettings({ ...settings, contactEmail: e.target.value })}
                 />
               </div>
 
@@ -92,7 +92,7 @@ export default function AdminSettingsPage() {
                 <Input
                   id="supportPhone"
                   value={settings.supportPhone}
-                  onChange={(e) => setSettings({ ...settings, supportPhone: e.target.value })}
+                  onChange={(e: React.ChangeEvent<HTMLInputElement>) => setSettings({ ...settings, supportPhone: e.target.value })}
                 />
               </div>
             </CardContent>
@@ -115,7 +115,7 @@ export default function AdminSettingsPage() {
                 </div>
                 <Switch
                   checked={settings.maintenanceMode}
-                  onCheckedChange={(checked) => setSettings({ ...settings, maintenanceMode: checked })}
+                  onCheckedChange={(checked: boolean) => setSettings({ ...settings, maintenanceMode: checked })}
                 />
               </div>
 
@@ -128,7 +128,7 @@ export default function AdminSettingsPage() {
                 </div>
                 <Switch
                   checked={settings.allowRegistration}
-                  onCheckedChange={(checked) => setSettings({ ...settings, allowRegistration: checked })}
+                  onCheckedChange={(checked: boolean) => setSettings({ ...settings, allowRegistration: checked })}
                 />
               </div>
 
@@ -141,7 +141,7 @@ export default function AdminSettingsPage() {
                 </div>
                 <Switch
                   checked={settings.requireEmailVerification}
-                  onCheckedChange={(checked) => setSettings({ ...settings, requireEmailVerification: checked })}
+                  onCheckedChange={(checked: boolean) => setSettings({ ...settings, requireEmailVerification: checked })}
                 />
               </div>
             </CardContent>
@@ -161,7 +161,7 @@ export default function AdminSettingsPage() {
                   id="stripeSecretKey"
                   type="password"
                   value={settings.stripeSecretKey}
-                  onChange={(e) => setSettings({ ...settings, stripeSecretKey: e.target.value })}
+                  onChange={(e: React.ChangeEvent<HTMLInputElement>) => setSettings({ ...settings, stripeSecretKey: e.target.value })}
                   placeholder="sk_live_..."
                 />
               </div>
@@ -172,7 +172,7 @@ export default function AdminSettingsPage() {
                   id="stripePublishableKey"
                   type="password"
                   value={settings.stripePublishableKey}
-                  onChange={(e) => setSettings({ ...settings, stripePublishableKey: e.target.value })}
+                  onChange={(e: React.ChangeEvent<HTMLInputElement>) => setSettings({ ...settings, stripePublishableKey: e.target.value })}
                   placeholder="pk_live_..."
                 />
               </div>
@@ -183,7 +183,7 @@ export default function AdminSettingsPage() {
                   id="razorpayKeyId"
                   type="password"
                   value={settings.razorpayKeyId}
-                  onChange={(e) => setSettings({ ...settings, razorpayKeyId: e.target.value })}
+                  onChange={(e: React.ChangeEvent<HTMLInputElement>) => setSettings({ ...settings, razorpayKeyId: e.target.value })}
                   placeholder="rzp_live_..."
                 />
               </div>
@@ -194,7 +194,7 @@ export default function AdminSettingsPage() {
                   id="razorpayKeySecret"
                   type="password"
                   value={settings.razorpayKeySecret}
-                  onChange={(e) => setSettings({ ...settings, razorpayKeySecret: e.target.value })}
+                  onChange={(e: React.ChangeEvent<HTMLInputElement>) => setSettings({ ...settings, razorpayKeySecret: e.target.value })}
                   placeholder="razorpay_secret_..."
                 />
               </div>
@@ -215,7 +215,7 @@ export default function AdminSettingsPage() {
                   id="googleClientId"
                   type="password"
                   value={settings.googleClientId}
-                  onChange={(e) => setSettings({ ...settings, googleClientId: e.target.value })}
+                  onChange={(e: React.ChangeEvent<HTMLInputElement>) => setSettings({ ...settings, googleClientId: e.target.value })}
                   placeholder="apps.googleusercontent.com"
                 />
               </div>
@@ -226,7 +226,7 @@ export default function AdminSettingsPage() {
                   id="googleClientSecret"
                   type="password"
                   value={settings.googleClientSecret}
-                  onChange={(e) => setSettings({ ...settings, googleClientSecret: e.target.value })}
+                  onChange={(e: React.ChangeEvent<HTMLInputElement>) => setSettings({ ...settings, googleClientSecret: e.target.value })}
                   placeholder="GOCSPX-..."
                 />
               </div>
@@ -247,7 +247,7 @@ export default function AdminSettingsPage() {
                   id="notificationEmail"
                   type="email"
                   value={settings.notificationEmail}
-                  onChange={(e) => setSettings({ ...settings, notificationEmail: e.target.value })}
+                  onChange={(e: React.ChangeEvent<HTMLInputElement>) => setSettings({ ...settings, notificationEmail: e.target.value })}
                 />
               </div>
             </CardContent>

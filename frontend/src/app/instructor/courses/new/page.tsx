@@ -62,7 +62,7 @@ export default function CreateCoursePage() {
                   id="title"
                   placeholder="Enter course title"
                   value={formData.title}
-                  onChange={(e) => setFormData({ ...formData, title: e.target.value })}
+                  onChange={(e: React.ChangeEvent<HTMLInputElement>) => setFormData({ ...formData, title: e.target.value })}
                   required
                 />
               </div>
@@ -73,7 +73,7 @@ export default function CreateCoursePage() {
                   id="description"
                   placeholder="Enter course description"
                   value={formData.description}
-                  onChange={(e) => setFormData({ ...formData, description: e.target.value })}
+                  onChange={(e: React.ChangeEvent<HTMLTextAreaElement>) => setFormData({ ...formData, description: e.target.value })}
                   rows={4}
                   required
                 />
@@ -85,7 +85,7 @@ export default function CreateCoursePage() {
                   <select
                     id="category"
                     value={formData.category}
-                    onChange={(e) => setFormData({ ...formData, category: e.target.value })}
+                    onChange={(e: React.ChangeEvent<HTMLSelectElement>) => setFormData({ ...formData, category: e.target.value })}
                     className="w-full px-4 py-2 rounded-xl border bg-background focus:outline-none focus:ring-2 focus:ring-primary"
                   >
                     <option value="Programming">Programming</option>
@@ -100,7 +100,7 @@ export default function CreateCoursePage() {
                   <select
                     id="difficulty"
                     value={formData.difficulty}
-                    onChange={(e) => setFormData({ ...formData, difficulty: e.target.value })}
+                    onChange={(e: React.ChangeEvent<HTMLSelectElement>) => setFormData({ ...formData, difficulty: e.target.value })}
                     className="w-full px-4 py-2 rounded-xl border bg-background focus:outline-none focus:ring-2 focus:ring-primary"
                   >
                     <option value="BEGINNER">Beginner</option>
@@ -117,7 +117,7 @@ export default function CreateCoursePage() {
                     id="price"
                     type="number"
                     value={formData.price}
-                    onChange={(e) => setFormData({ ...formData, price: parseInt(e.target.value) })}
+                    onChange={(e: React.ChangeEvent<HTMLInputElement>) => setFormData({ ...formData, price: parseInt(e.target.value) || 0 })}
                     required
                   />
                 </div>
@@ -127,7 +127,7 @@ export default function CreateCoursePage() {
                   <Input
                     id="language"
                     value={formData.language}
-                    onChange={(e) => setFormData({ ...formData, language: e.target.value })}
+                    onChange={(e: React.ChangeEvent<HTMLInputElement>) => setFormData({ ...formData, language: e.target.value })}
                     required
                   />
                 </div>

@@ -9,10 +9,14 @@ concurrency:
   group: security
   cancel-in-progress: true
 
+permissions:
+  contents: read
+  security-events: write
+
 jobs:
   dependency-scan:
     name: Dependency Vulnerability Scan
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-20.04
     continue-on-error: true
     timeout-minutes: 20
     
@@ -37,7 +41,7 @@ jobs:
 
   code-scan:
     name: CodeQL Analysis
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-20.04
     timeout-minutes: 30
     continue-on-error: true
     
@@ -57,7 +61,7 @@ jobs:
 
   container-scan:
     name: Container Security Scan
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-20.04
     continue-on-error: true
     timeout-minutes: 20
     

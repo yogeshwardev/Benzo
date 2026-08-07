@@ -6,14 +6,8 @@
 set -e
 
 # Configuration
-DOMAIN=$1
-EMAIL=$2
-
-if [ -z "$DOMAIN" ] || [ -z "$EMAIL" ]; then
-    echo "Usage: ./setup-ssl.sh <domain> <email>"
-    echo "Example: ./setup-ssl.sh skillforge.com admin@skillforge.com"
-    exit 1
-fi
+DOMAIN="benzo.co.in"
+EMAIL="admin@benzo.co.in"
 
 echo "🔒 Setting up SSL for $DOMAIN..."
 

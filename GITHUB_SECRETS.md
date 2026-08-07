@@ -3,7 +3,7 @@
 ## AWS Secrets
 
 ### AWS Credentials
-- **AWS_HOST**: Your EC2 instance IP address or domain (e.g., `123.45.67.89` or `skillforge.com`)
+- **AWS_HOST**: EC2 instance IP address (e.g., `32.198.122.128`)
 - **AWS_USER**: SSH username for EC2 (usually `ubuntu`)
 - **AWS_SSH_KEY**: Private SSH key for EC2 instance (the private key file content)
 
@@ -26,6 +26,7 @@
 ### Google OAuth
 - **GOOGLE_CLIENT_ID**: Google OAuth 2.0 Client ID from Google Cloud Console
 - **GOOGLE_CLIENT_SECRET**: Google OAuth 2.0 Client Secret from Google Cloud Console
+- **Note**: Set callback URL to `https://benzo.co.in/api/auth/google/callback` in Google Console
 
 ### Payment Gateway
 - **RAZORPAY_KEY_ID**: Razorpay Key ID from Razorpay Dashboard

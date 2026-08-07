@@ -7,7 +7,7 @@ import { BookOpen, Clock, Users, Star, Play, Check, Download, Share } from 'luci
 import { formatPrice, formatDuration } from '@/lib/utils'
 import { motion } from 'framer-motion'
 
-export default function CourseDetailPage({ params }: { params: { id: string } }) {
+export default function CourseDetailPage({ params }: any) {
   const [activeTab, setActiveTab] = useState('curriculum')
 
   // Mock course data - replace with actual API call

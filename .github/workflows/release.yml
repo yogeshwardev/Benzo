@@ -13,7 +13,7 @@ concurrency:
 jobs:
   create-release:
     name: Create GitHub Release
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-20.04
     timeout-minutes: 15
     
     steps:
@@ -44,7 +44,7 @@ jobs:
 
   build-and-push-images:
     name: Build and Push Docker Images
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-20.04
     needs: create-release
     timeout-minutes: 60
     

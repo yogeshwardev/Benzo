@@ -15,7 +15,16 @@ export default function AdminCouponsPage() {
   const [coupons, setCoupons] = useState<any[]>([])
   const [loading, setLoading] = useState(true)
   const [showCreateForm, setShowCreateForm] = useState(false)
-  const [formData, setFormData] = useState({
+  const [formData, setFormData] = useState<{
+    code: string
+    discountType: string
+    discountValue: number
+    maxDiscount: number | null
+    expiryDate: string
+    usageLimit: number
+    courseId: string
+    minPurchase: number
+  }>({
     code: '',
     discountType: 'FLAT',
     discountValue: 0,
@@ -35,7 +44,6 @@ export default function AdminCouponsPage() {
       const data = await api.getAdminCoupons()
       setCoupons(data)
     } catch (error) {
-      console.error('Failed to load coupons:', error)
       setCoupons([
         {
           id: '1',
@@ -106,141 +114,145 @@ export default function AdminCouponsPage() {
   return (
     <DashboardLayout>
       <div className="container mx-auto px-4 py-8">
-        <div className="flex items-center justify-between mb-6">
-          <h1 className="text-3xl font-bold">Coupon Management</h1>
-          <Button onClick={() => setShowCreateForm(!showCreateForm)}>
-            <Plus className="mr-2 h-4 w-4" />
-            Create Coupon
-          </Button>
-        </div>
+        <div className="space-y-6">
+          <div className="flex items-center justify-between">
+            <div>
+              <h1 className="text-3xl font-bold">Coupons & Discounts</h1>
+              <p className="text-muted-foreground">Manage promotional codes and discounts</p>
+            </div>
+            <Button onClick={() => setShowCreateForm(!showCreateForm)}>
+              <Plus className="h-4 w-4 mr-2" />
+              Create Coupon
+            </Button>
+          </div>
 
-        {showCreateForm && (
-          <Card className="mb-6">
-            <CardHeader>
-              <CardTitle>Create New Coupon</CardTitle>
-            </CardHeader>
-            <CardContent>
-              <form onSubmit={handleSubmit} className="space-y-4">
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                  <div className="space-y-2">
-                    <Label htmlFor="code">Coupon Code</Label>
-                    <Input
-                      id="code"
-                      placeholder="e.g., WELCOME100"
-                      value={formData.code}
-                      onChange={(e) => setFormData({ ...formData, code: e.target.value.toUpperCase() })}
-                      required
-                    />
+          {showCreateForm && (
+            <Card>
+              <CardHeader>
+                <CardTitle>Create New Coupon</CardTitle>
+              </CardHeader>
+              <CardContent>
+                <form onSubmit={handleSubmit} className="space-y-4">
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <div className="space-y-2">
+                      <Label htmlFor="code">Coupon Code</Label>
+                      <Input
+                        id="code"
+                        placeholder="e.g., WELCOME100"
+                        value={formData.code}
+                        onChange={(e: React.ChangeEvent<HTMLInputElement>) => setFormData({ ...formData, code: e.target.value.toUpperCase() })}
+                        required
+                      />
+                    </div>
+
+                    <div className="space-y-2">
+                      <Label htmlFor="discountType">Discount Type</Label>
+                      <Select
+                        value={formData.discountType}
+                        onValueChange={(value) => setFormData({ ...formData, discountType: value })}
+                      >
+                        <SelectTrigger>
+                          <SelectValue />
+                        </SelectTrigger>
+                        <SelectContent>
+                          <SelectItem value="FLAT">Flat Discount</SelectItem>
+                          <SelectItem value="PERCENTAGE">Percentage Discount</SelectItem>
+                        </SelectContent>
+                      </Select>
+                    </div>
+
+                    <div className="space-y-2">
+                      <Label htmlFor="discountValue">Discount Value</Label>
+                      <Input
+                        id="discountValue"
+                        type="number"
+                        placeholder="Amount or percentage"
+                        value={formData.discountValue}
+                        onChange={(e: React.ChangeEvent<HTMLInputElement>) => setFormData({ ...formData, discountValue: parseInt(e.target.value) || 0 })}
+                        required
+                      />
+                    </div>
+
+                    <div className="space-y-2">
+                      <Label htmlFor="maxDiscount">Max Discount (Optional)</Label>
+                      <Input
+                        id="maxDiscount"
+                        type="number"
+                        placeholder="Maximum discount amount"
+                        value={formData.maxDiscount || ''}
+                        onChange={(e: React.ChangeEvent<HTMLInputElement>) => setFormData({ ...formData, maxDiscount: e.target.value ? parseInt(e.target.value) : null })}
+                      />
+                    </div>
                   </div>
 
-                  <div className="space-y-2">
-                    <Label htmlFor="discountType">Discount Type</Label>
-                    <Select
-                      value={formData.discountType}
-                      onValueChange={(value) => setFormData({ ...formData, discountType: value })}
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <div className="space-y-2">
+                      <Label htmlFor="expiryDate">Expiry Date</Label>
+                      <Input
+                        id="expiryDate"
+                        type="date"
+                        value={formData.expiryDate}
+                        onChange={(e: React.ChangeEvent<HTMLInputElement>) => setFormData({ ...formData, expiryDate: e.target.value })}
+                        required
+                      />
+                    </div>
+
+                    <div className="space-y-2">
+                      <Label htmlFor="usageLimit">Usage Limit</Label>
+                      <Input
+                        id="usageLimit"
+                        type="number"
+                        placeholder="Number of uses"
+                        value={formData.usageLimit}
+                        onChange={(e: React.ChangeEvent<HTMLInputElement>) => setFormData({ ...formData, usageLimit: parseInt(e.target.value) || 0 })}
+                        required
+                      />
+                    </div>
+                  </div>
+
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <div className="space-y-2">
+                      <Label htmlFor="minPurchase">Min Purchase (₹)</Label>
+                      <Input
+                        id="minPurchase"
+                        type="number"
+                        placeholder="Minimum purchase amount"
+                        value={formData.minPurchase}
+                        onChange={(e: React.ChangeEvent<HTMLInputElement>) => setFormData({ ...formData, minPurchase: parseInt(e.target.value) || 0 })}
+                      />
+                    </div>
+
+                    <div className="space-y-2">
+                      <Label htmlFor="courseId">Course (Optional)</Label>
+                      <Input
+                        id="courseId"
+                        placeholder="Select course"
+                        value={formData.courseId}
+                        onChange={(e: React.ChangeEvent<HTMLInputElement>) => setFormData({ ...formData, courseId: e.target.value })}
+                      />
+                    </div>
+                  </div>
+
+                  <div className="flex space-x-4">
+                    <Button type="submit" disabled={loading}>
+                      {loading ? 'Creating...' : 'Create Coupon'}
+                    </Button>
+                    <Button
+                      type="button"
+                      variant="outline"
+                      onClick={() => setShowCreateForm(false)}
                     >
-                      <SelectTrigger>
-                        <SelectValue />
-                      </SelectTrigger>
-                      <SelectContent>
-                        <SelectItem value="FLAT">Flat Discount</SelectItem>
-                        <SelectItem value="PERCENTAGE">Percentage Discount</SelectItem>
-                      </SelectContent>
-                    </Select>
+                      Cancel
+                    </Button>
                   </div>
+                </form>
+              </CardContent>
+            </Card>
+          )}
 
-                  <div className="space-y-2">
-                    <Label htmlFor="discountValue">Discount Value</Label>
-                    <Input
-                      id="discountValue"
-                      type="number"
-                      placeholder="Amount or percentage"
-                      value={formData.discountValue}
-                      onChange={(e) => setFormData({ ...formData, discountValue: parseInt(e.target.value) })}
-                      required
-                    />
-                  </div>
-
-                  <div className="space-y-2">
-                    <Label htmlFor="maxDiscount">Max Discount (Optional)</Label>
-                    <Input
-                      id="maxDiscount"
-                      type="number"
-                      placeholder="Maximum discount amount"
-                      value={formData.maxDiscount || ''}
-                      onChange={(e) => setFormData({ ...formData, maxDiscount: e.target.value ? parseInt(e.target.value) : null })}
-                    />
-                  </div>
-                </div>
-
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                  <div className="space-y-2">
-                    <Label htmlFor="expiryDate">Expiry Date</Label>
-                    <Input
-                      id="expiryDate"
-                      type="date"
-                      value={formData.expiryDate}
-                      onChange={(e) => setFormData({ ...formData, expiryDate: e.target.value })}
-                      required
-                    />
-                  </div>
-
-                  <div className="space-y-2">
-                    <Label htmlFor="usageLimit">Usage Limit</Label>
-                    <Input
-                      id="usageLimit"
-                      type="number"
-                      placeholder="Number of uses"
-                      value={formData.usageLimit}
-                      onChange={(e) => setFormData({ ...formData, usageLimit: parseInt(e.target.value) })}
-                      required
-                    />
-                  </div>
-                </div>
-
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                  <div className="space-y-2">
-                    <Label htmlFor="minPurchase">Min Purchase (₹)</Label>
-                    <Input
-                      id="minPurchase"
-                      type="number"
-                      placeholder="Minimum purchase amount"
-                      value={formData.minPurchase}
-                      onChange={(e) => setFormData({ ...formData, minPurchase: parseInt(e.target.value) })}
-                    />
-                  </div>
-
-                  <div className="space-y-2">
-                    <Label htmlFor="courseId">Course (Optional)</Label>
-                    <Input
-                      id="courseId"
-                      placeholder="Select course"
-                      value={formData.courseId}
-                      onChange={(e) => setFormData({ ...formData, courseId: e.target.value })}
-                    />
-                  </div>
-                </div>
-
-                <div className="flex space-x-4">
-                  <Button type="submit" disabled={loading}>
-                    {loading ? 'Creating...' : 'Create Coupon'}
-                  </Button>
-                  <Button
-                    type="button"
-                    variant="outline"
-                    onClick={() => setShowCreateForm(false)}
-                  >
-                    Cancel
-                  </Button>
-                </div>
-              </form>
-            </CardContent>
-          </Card>
-        )}
-
-        <Card>
-          <CardContent className="p-0">
-            <div className="overflow-x-auto">
+          <Card>
+            <CardContent className="p-0">
+              <div className="overflow-x-auto">
               <table className="w-full">
                 <thead>
                   <tr className="border-b">
@@ -301,6 +313,7 @@ export default function AdminCouponsPage() {
           </CardContent>
         </Card>
       </div>
-    </DashboardLayout>
+    </div>
+  </DashboardLayout>
   )
 }

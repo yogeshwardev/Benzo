@@ -71,7 +71,7 @@ export default function InstructorAnnouncementsPage() {
                     id="title"
                     placeholder="Announcement title"
                     value={formData.title}
-                    onChange={(e) => setFormData({ ...formData, title: e.target.value })}
+                    onChange={(e: React.ChangeEvent<HTMLInputElement>) => setFormData({ ...formData, title: e.target.value })}
                     required
                   />
                 </div>
@@ -82,7 +82,7 @@ export default function InstructorAnnouncementsPage() {
                     id="course"
                     placeholder="Select course"
                     value={formData.courseId}
-                    onChange={(e) => setFormData({ ...formData, courseId: e.target.value })}
+                    onChange={(e: React.ChangeEvent<HTMLInputElement>) => setFormData({ ...formData, courseId: e.target.value })}
                   />
                 </div>
 
@@ -92,7 +92,7 @@ export default function InstructorAnnouncementsPage() {
                     id="message"
                     placeholder="Your announcement message"
                     value={formData.message}
-                    onChange={(e) => setFormData({ ...formData, message: e.target.value })}
+                    onChange={(e: React.ChangeEvent<HTMLTextAreaElement>) => setFormData({ ...formData, message: e.target.value })}
                     rows={4}
                     required
                   />

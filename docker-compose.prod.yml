@@ -77,7 +77,7 @@ services:
     env_file:
       - .env
     environment:
-      NEXT_PUBLIC_API_URL: https://${DOMAIN:-localhost}/api
+      NEXT_PUBLIC_API_URL: https://benzo.co.in/api
     ports:
       - "3000:3000"
     depends_on:

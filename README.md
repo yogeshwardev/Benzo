@@ -169,6 +169,14 @@ The application will be available at:
 - Backend API: http://localhost:3001
 - API Docs: http://localhost:3001/api/docs
 
+## Production Deployment
+
+For production deployment to benzo.co.in (IP: 32.198.122.128):
+- Domain: benzo.co.in
+- SSL: Let's Encrypt (auto-renewal)
+- Server: Ubuntu EC2 with Docker
+- See `DEPLOYMENT.md` for detailed deployment instructions
+
 ## 🐳 Docker Deployment
 
 ```bash
